@@ -1,7 +1,7 @@
 class Verse
     def to_s()
-        "#{self.bottles().capitalize} of beer on the wall, #{self.bottles()} of beer.\n" \
-        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall.\n"
+        "#{self.number_of_bottles().capitalize} of beer on the wall, #{self.number_of_bottles()} of beer.\n" \
+        "#{self.take_bottle()}, #{self.next().number_of_bottles()} of beer on the wall.\n"
     end
 end
 
@@ -10,7 +10,7 @@ class ManyBottlesVerse < Verse
         @number = number
     end
 
-    def bottles()
+    def number_of_bottles()
         "#{@number} bottles"
     end
 
@@ -28,7 +28,7 @@ class ManyBottlesVerse < Verse
 end
 
 class OneBottleVerse < Verse
-    def bottles()
+    def number_of_bottles()
         '1 bottle'
     end
 
@@ -42,7 +42,7 @@ class OneBottleVerse < Verse
 end
 
 class ZeroBottlesVerse  < Verse
-    def bottles()
+    def number_of_bottles()
         'no more bottles'
     end
 
