@@ -1,7 +1,7 @@
 class Verse
     def to_s()
         "#{self.bottles().capitalize} of beer on the wall, #{self.bottles()} of beer.\n" \
-        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall."
+        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall.\n"
     end
 end
 
@@ -16,10 +16,6 @@ class ManyBottlesVerse < Verse
 
     def take_bottle()
         'Take one down and pass it around'
-    end
-
-    def bottles()
-        "#{@number} bottles"
     end
 
     def next()
@@ -40,10 +36,6 @@ class OneBottleVerse < Verse
         'Take it down and pass it around'
     end
 
-    def bottles()
-        '1 bottle'
-    end
-
     def next()
         ZeroBottlesVerse.new()
     end
@@ -58,10 +50,6 @@ class ZeroBottlesVerse  < Verse
         'Go to the store and buy some more'
     end
 
-    def bottles()
-        'no more bottles'
-    end
-
     def next()
         ManyBottlesVerse.new(99)
     end
@@ -73,29 +61,17 @@ class Bottles
     end
 
     def verses(high, low)
-        <<-VERSES
-#{self.verse_from_to(high, low)}
-VERSES
-    end
-
-    def verse(number)
-        <<-VERSE
-#{self.verse_without_header(number)}
-VERSE
-    end
-
-    def verse_from_to(high, low)
         verses = ''
 
         (low..high).reverse_each do |bottle|
-            verses << "#{self.verse_without_header(bottle)}"
-            verses << "\n\n" unless bottle == low
+            verses << "#{self.verse(bottle)}"
+            verses << "\n" unless bottle == low
         end
         
         verses
     end
 
-    def verse_without_header(number)
+    def verse(number)
         case number
             when 0
                 ZeroBottlesVerse.new.to_s
