@@ -1,4 +1,15 @@
 class Verse
+    def self.number(number)
+        case number
+            when 0
+                ZeroBottlesVerse.new
+            when 1
+                OneBottleVerse.new
+            else
+                ManyBottlesVerse.new(number)
+        end
+    end
+
     def to_s()
         "#{self.number_of_bottles().capitalize} of beer on the wall, #{self.number_of_bottles()} of beer.\n" \
         "#{self.take_bottle()}, #{self.next().number_of_bottles()} of beer on the wall.\n"
@@ -61,24 +72,10 @@ class Bottles
     end
 
     def verses(high, low)
-        verses = ''
-
-        (low..high).reverse_each do |bottle|
-            verses << "#{self.verse(bottle)}"
-            verses << "\n" unless bottle == low
-        end
-        
-        verses
+        high.downto(low).map { |bottle| verse(bottle).to_s }.join("\n")
     end
 
     def verse(number)
-        case number
-            when 0
-                ZeroBottlesVerse.new.to_s
-            when 1
-                OneBottleVerse.new.to_s
-            else
-                ManyBottlesVerse.new(number).to_s
-        end
+        Verse.number(number).to_s
     end
 end
