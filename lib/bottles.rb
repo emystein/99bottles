@@ -1,13 +1,80 @@
+class Verse
+    def to_s()
+        "#{self.bottles().capitalize} of beer on the wall, #{self.bottles()} of beer.\n" \
+        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall."
+    end
+end
+
+class ManyBottlesVerse < Verse
+    def initialize(number)
+        @number = number
+    end
+
+    def bottles()
+        "#{@number} bottles"
+    end
+
+    def take_bottle()
+        'Take one down and pass it around'
+    end
+
+    def bottles()
+        "#{@number} bottles"
+    end
+
+    def next()
+        if (@number > 2) then
+            ManyBottlesVerse.new(@number - 1)
+        else
+            OneBottleVerse.new()
+        end
+    end
+end
+
+class OneBottleVerse < Verse
+    def bottles()
+        '1 bottle'
+    end
+
+    def take_bottle()
+        'Take it down and pass it around'
+    end
+
+    def bottles()
+        '1 bottle'
+    end
+
+    def next()
+        ZeroBottlesVerse.new()
+    end
+end
+
+class ZeroBottlesVerse  < Verse
+    def bottles()
+        'no more bottles'
+    end
+
+    def take_bottle()
+        'Go to the store and buy some more'
+    end
+
+    def bottles()
+        'no more bottles'
+    end
+
+    def next()
+        ManyBottlesVerse.new(99)
+    end
+end
+
 class Bottles
     def song()
-        <<-VERSES
-#{self.verse_repeat(99, 0)}
-VERSES
+        self.verses(99, 0)
     end
 
     def verses(high, low)
         <<-VERSES
-#{self.verse_repeat(high, low)}
+#{self.verse_from_to(high, low)}
 VERSES
     end
 
@@ -17,60 +84,25 @@ VERSES
 VERSE
     end
 
-    def verse_repeat(high, low)
-        c = ''
+    def verse_from_to(high, low)
+        verses = ''
+
         (low..high).reverse_each do |bottle|
-            c = c + "#{self.verse_without_header(bottle)}"
-            if (bottle > low) then
-                c = c + "\n\n"
-            end
+            verses << "#{self.verse_without_header(bottle)}"
+            verses << "\n\n" unless bottle == low
         end
-        c
+        
+        verses
     end
 
     def verse_without_header(number)
-        "#{self.bottles_on_the_wall_start(number)} of beer on the wall, #{self.bottles_on_the_wall_end(number)} of beer.\n#{self.take_bottle(number)}, #{self.bottles(number - 1)} of beer on the wall."
-    end
-
-    def bottles_on_the_wall_start(number)
-        if (number == 0) then
-            'No more bottles'
-        elsif (number == 1) then
-            '1 bottle'
-        else
-            "#{number} bottles"
-        end
-    end
-
-    def bottles_on_the_wall_end(number)
-        if (number == 0) then
-            'no more bottles'
-        elsif (number == 1) then
-            '1 bottle'
-        else
-            "#{number} bottles"
-        end
-    end
-
-    def bottles(number)
-        if (number == -1) then
-            '99 bottles'
-        elsif (number == 0) then
-            'no more bottles'
-        elsif (number == 1) then
-            '1 bottle'
-        else
-            "#{number} bottles"
-        end
-    end
-
-    def take_bottle(number)
-        if (number == 0) then
-            'Go to the store and buy some more'
-        elsif (number == 1) then
-            'Take it down and pass it around'
-        else
-            'Take one down and pass it around'
+        case number
+            when 0
+                ZeroBottlesVerse.new.to_s
+            when 1
+                OneBottleVerse.new.to_s
+            else
+                ManyBottlesVerse.new(number).to_s
         end
     end
 end
