@@ -20,7 +20,14 @@ end
 
 class Verse
     def self.number(number)
-        number == 0 ? ZeroBottleVerse.new : ManyBottlesVerse.new(number)
+        case number
+        when 0
+            ZeroBottleVerse.new
+        when 1
+            OneBottleVerse.new
+        else
+            ManyBottlesVerse.new(number)
+        end
     end
 
     def to_s()
@@ -43,18 +50,13 @@ class ZeroBottleVerse  < Verse
     end
 end
 
-class ManyBottlesVerse < Verse
-    def initialize(number)
-        @number = number
-        @cardinality = number == 1 ? SingularCardinality.new : PluralCardinality.new
-    end
-
+class PassAroundVerse < Verse
     def number_of_bottles()
-        "#{@number} bottle#{@cardinality.suffix}"
+        "#{@number} #{@bottle_or_bottles}"
     end
 
     def take_bottle()
-        "Take #{@cardinality.one} down and pass it around"
+        "Take #{@bottle_article} down and pass it around"
     end
 
     def next()
@@ -62,22 +64,18 @@ class ManyBottlesVerse < Verse
     end
 end
 
-class SingularCardinality
-    def suffix()
-        ''
-    end
-
-    def one()
-        'it'
+class ManyBottlesVerse < PassAroundVerse
+    def initialize(number)
+        @number = number
+        @bottle_or_bottles = 'bottles'
+        @bottle_article = 'one'
     end
 end
 
-class PluralCardinality
-    def suffix()
-        's'
-    end
-
-    def one()
-        'one'
+class OneBottleVerse < PassAroundVerse
+    def initialize()
+        @number = 1
+        @bottle_or_bottles = 'bottle'
+        @bottle_article = 'it'
     end
 end
