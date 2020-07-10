@@ -19,6 +19,9 @@ class Bottles
 end
 
 class Verse
+    attr_reader :quantity
+    attr_reader :container
+
     def self.number(number)
         case number
         when 0
@@ -33,17 +36,22 @@ class Verse
     end
 
     def to_s()
-        "#{self.container().capitalize} of beer on the wall, #{self.container()} of beer.\n" \
-        "#{self.take_bottle()}, #{self.next().container()} of beer on the wall.\n"
+        "#{self.quantity_in_container().capitalize} of beer on the wall, #{self.quantity_in_container()} of beer.\n" \
+        "#{self.action()}, #{self.next().quantity_in_container()} of beer on the wall.\n"
+    end
+
+    def quantity_in_container()
+        "#{self.quantity} #{self.container}"
     end
 end
 
 class ZeroBottleVerse  < Verse
-    def container()
-        'no more bottles'
+    def initialize()
+        @quantity = 'no more'
+        @container = 'bottles'
     end
 
-    def take_bottle()
+    def action()
         'Go to the store and buy some more'
     end
 
@@ -53,10 +61,8 @@ class ZeroBottleVerse  < Verse
 end
 
 class PassAroundVerse < Verse
-    attr_reader :container
-
-    def take_bottle()
-        "Take #{@bottle_article} down and pass it around"
+    def action()
+        "Take #{@pronoun} down and pass it around"
     end
 
     def next()
@@ -67,23 +73,26 @@ end
 class ManyBottlesVerse < PassAroundVerse
     def initialize(number_of_bottles)
         @number_of_bottles = number_of_bottles
-        @container = "#{number_of_bottles} bottles"
-        @bottle_article = 'one'
+        @quantity = @number_of_bottles
+        @container = 'bottles'
+        @pronoun = 'one'
     end
 end
 
 class OneBottleVerse < PassAroundVerse
     def initialize()
         @number_of_bottles = 1
-        @container = '1 bottle'
-        @bottle_article = 'it'
+        @quantity = 1
+        @container = 'bottle'
+        @pronoun = 'it'
     end
 end
 
 class OneSixPackVerse < PassAroundVerse
     def initialize()
         @number_of_bottles = 6
-        @container = '1 six-pack'
-        @bottle_article = 'one'
+        @quantity = 1
+        @container = 'six-pack'
+        @pronoun = 'one'
     end
 end
