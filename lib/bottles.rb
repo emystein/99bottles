@@ -1,3 +1,23 @@
+class Bottles
+    @@total = 99
+
+    def self.total
+        @@total
+    end
+
+    def song
+        self.verses(@@total, 0)
+    end
+
+    def verses(high, low)
+        high.downto(low).map { |bottle| self.verse(bottle) }.join("\n")
+    end
+
+    def verse(number)
+        Verse.number(number).to_s
+    end
+end
+
 class Verse
     def self.number(number)
         number == 0 ? ZeroBottleVerse.new : ManyBottlesVerse.new(number)
@@ -59,25 +79,5 @@ class PluralCardinality
 
     def one()
         'one'
-    end
-end
-
-class Bottles
-    @@total = 99
-
-    def self.total
-        @@total
-    end
-
-    def song
-        self.verses(@@total, 0)
-    end
-
-    def verses(high, low)
-        high.downto(low).map { |bottle| self.verse(bottle) }.join("\n")
-    end
-
-    def verse(number)
-        Verse.number(number).to_s
     end
 end
