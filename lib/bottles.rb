@@ -25,19 +25,21 @@ class Verse
             ZeroBottleVerse.new
         when 1
             OneBottleVerse.new
+        when 6
+            OneSixPackVerse.new
         else
             ManyBottlesVerse.new(number)
         end
     end
 
     def to_s()
-        "#{self.bottles().capitalize} of beer on the wall, #{self.bottles()} of beer.\n" \
-        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall.\n"
+        "#{self.container().capitalize} of beer on the wall, #{self.container()} of beer.\n" \
+        "#{self.take_bottle()}, #{self.next().container()} of beer on the wall.\n"
     end
 end
 
 class ZeroBottleVerse  < Verse
-    def bottles()
+    def container()
         'no more bottles'
     end
 
@@ -51,9 +53,7 @@ class ZeroBottleVerse  < Verse
 end
 
 class PassAroundVerse < Verse
-    def bottles()
-        "#{@number_of_bottles} #{@bottle_or_bottles}"
-    end
+    attr_reader :container
 
     def take_bottle()
         "Take #{@bottle_article} down and pass it around"
@@ -67,7 +67,7 @@ end
 class ManyBottlesVerse < PassAroundVerse
     def initialize(number_of_bottles)
         @number_of_bottles = number_of_bottles
-        @bottle_or_bottles = 'bottles'
+        @container = "#{number_of_bottles} bottles"
         @bottle_article = 'one'
     end
 end
@@ -75,7 +75,15 @@ end
 class OneBottleVerse < PassAroundVerse
     def initialize()
         @number_of_bottles = 1
-        @bottle_or_bottles = 'bottle'
+        @container = '1 bottle'
         @bottle_article = 'it'
+    end
+end
+
+class OneSixPackVerse < PassAroundVerse
+    def initialize()
+        @number_of_bottles = 6
+        @container = '1 six-pack'
+        @bottle_article = 'one'
     end
 end

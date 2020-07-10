@@ -347,9 +347,9 @@ Take one down and pass it around, 8 bottles of beer on the wall.
 Take one down and pass it around, 7 bottles of beer on the wall.
 
 7 bottles of beer on the wall, 7 bottles of beer.
-Take one down and pass it around, 6 bottles of beer on the wall.
+Take one down and pass it around, 1 six-pack of beer on the wall.
 
-6 bottles of beer on the wall, 6 bottles of beer.
+1 six-pack of beer on the wall, 1 six-pack of beer.
 Take one down and pass it around, 5 bottles of beer on the wall.
 
 5 bottles of beer on the wall, 5 bottles of beer.
@@ -371,5 +371,21 @@ No more bottles of beer on the wall, no more bottles of beer.
 Go to the store and buy some more, 99 bottles of beer on the wall.
     SONG
     assert_equal expected, ::Bottles.new.song
+  end
+
+  def test_verse_seven
+    expected = <<-VERSE
+7 bottles of beer on the wall, 7 bottles of beer.
+Take one down and pass it around, 1 six-pack of beer on the wall.
+    VERSE
+    assert_equal expected, ::Bottles.new.verse(7)
+  end
+
+  def test_verse_six
+    expected = <<-VERSE
+1 six-pack of beer on the wall, 1 six-pack of beer.
+Take one down and pass it around, 5 bottles of beer on the wall.
+    VERSE
+    assert_equal expected, ::Bottles.new.verse(6)
   end
 end
