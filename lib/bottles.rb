@@ -31,13 +31,13 @@ class Verse
     end
 
     def to_s()
-        "#{self.number_of_bottles().capitalize} of beer on the wall, #{self.number_of_bottles()} of beer.\n" \
-        "#{self.take_bottle()}, #{self.next().number_of_bottles()} of beer on the wall.\n"
+        "#{self.bottles().capitalize} of beer on the wall, #{self.bottles()} of beer.\n" \
+        "#{self.take_bottle()}, #{self.next().bottles()} of beer on the wall.\n"
     end
 end
 
 class ZeroBottleVerse  < Verse
-    def number_of_bottles()
+    def bottles()
         'no more bottles'
     end
 
@@ -51,8 +51,8 @@ class ZeroBottleVerse  < Verse
 end
 
 class PassAroundVerse < Verse
-    def number_of_bottles()
-        "#{@number} #{@bottle_or_bottles}"
+    def bottles()
+        "#{@number_of_bottles} #{@bottle_or_bottles}"
     end
 
     def take_bottle()
@@ -60,13 +60,13 @@ class PassAroundVerse < Verse
     end
 
     def next()
-        Verse.number(@number - 1)
+        Verse.number(@number_of_bottles - 1)
     end
 end
 
 class ManyBottlesVerse < PassAroundVerse
-    def initialize(number)
-        @number = number
+    def initialize(number_of_bottles)
+        @number_of_bottles = number_of_bottles
         @bottle_or_bottles = 'bottles'
         @bottle_article = 'one'
     end
@@ -74,7 +74,7 @@ end
 
 class OneBottleVerse < PassAroundVerse
     def initialize()
-        @number = 1
+        @number_of_bottles = 1
         @bottle_or_bottles = 'bottle'
         @bottle_article = 'it'
     end
