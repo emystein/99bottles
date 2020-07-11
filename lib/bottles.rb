@@ -1,12 +1,10 @@
 class Bottles
-    @@total = 99
-
     def self.total
-        @@total
+        99
     end
 
     def song
-        self.verses(@@total, 0)
+        self.verses(Bottles.total, 0)
     end
 
     def verses(high, low)
@@ -25,13 +23,13 @@ class Verse
     def self.create(number)
         case number
         when 0
-            ZeroBottleVerse.new(sucessor = ManyBottlesVerse.new(Bottles.total))
+            ZeroBottleVerse.new(sucessor = create(Bottles.total))
         when 1
-            OneBottleVerse.new
+            AnyBottlesVerse.new(number, quantity = '1', container = 'bottle', pronoun = 'it')
         when 6
-            OneSixPackVerse.new
+            AnyBottlesVerse.new(number, quantity = '1', container = 'six-pack', pronoun = 'one')
         else
-            ManyBottlesVerse.new(number)
+            AnyBottlesVerse.new(number, quantity = number.to_s, container = 'bottles', pronoun = 'one')
         end
     end
 
@@ -65,29 +63,11 @@ class ZeroBottleVerse < Verse
     end
 end
 
-class ManyBottlesVerse < Verse
-    def initialize(number)
+class AnyBottlesVerse < Verse
+    def initialize(number, quantity, container, pronoun)
         @number = number
-        @quantity = "#{number}"
-        @container = 'bottles'
-        @pronoun = 'one'
-    end
-end
-
-class OneBottleVerse < Verse
-    def initialize()
-        @number = 1
-        @quantity = '1'
-        @container = 'bottle'
-        @pronoun = 'it'
-    end
-end
-
-class OneSixPackVerse < Verse
-    def initialize()
-        @number = 6
-        @quantity = '1'
-        @container = 'six-pack'
-        @pronoun = 'one'
+        @quantity = quantity
+        @container = container
+        @pronoun = pronoun
     end
 end
