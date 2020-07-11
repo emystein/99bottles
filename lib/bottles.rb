@@ -42,12 +42,12 @@ class Verse
     attr_reader :container
 
     def to_s()
-        "#{self.quantity_in_container().capitalize} of beer on the wall, #{self.quantity_in_container()} of beer.\n" \
-        "#{self.action()}, #{self.next().quantity_in_container()} of beer on the wall.\n"
+        "#{quantity_in_container().capitalize} of beer on the wall, #{quantity_in_container()} of beer.\n" \
+        "#{action()}, #{self.next().quantity_in_container()} of beer on the wall.\n"
     end
 
     def quantity_in_container()
-        "#{self.quantity} #{self.container}"
+        "#{quantity} #{container}"
     end
 end
 
