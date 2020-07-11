@@ -26,7 +26,7 @@ class VerseFactory
     def self.create(number)
         case number
         when 0
-            ZeroBottleVerse.new
+            ZeroBottleVerse.new(next_verse = create_first())
         when 1
             OneBottleVerse.new
         when 6
@@ -52,9 +52,10 @@ class Verse
 end
 
 class ZeroBottleVerse  < Verse
-    def initialize()
+    def initialize(next_verse)
         @quantity = 'no more'
         @container = 'bottles'
+        @next = next_verse
     end
 
     def action()
@@ -62,7 +63,7 @@ class ZeroBottleVerse  < Verse
     end
 
     def next()
-        VerseFactory.create_first()
+        @next
     end
 end
 
