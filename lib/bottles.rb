@@ -14,19 +14,18 @@ class Bottles
     end
 
     def verse(number)
-        VerseFactory.create(number).to_s
+        Verse.create(number).to_s
     end
 end
 
-class VerseFactory
-    def self.create_first()
-        ManyBottlesVerse.new(Bottles.total)
-    end
+class Verse
+    attr_reader :quantity
+    attr_reader :container
 
     def self.create(number)
         case number
         when 0
-            ZeroBottleVerse.new(next_verse = create_first())
+            ZeroBottleVerse.new(sucessor = ManyBottlesVerse.new(Bottles.total))
         when 1
             OneBottleVerse.new
         when 6
@@ -35,45 +34,38 @@ class VerseFactory
             ManyBottlesVerse.new(number)
         end
     end
-end
-
-class Verse
-    attr_reader :quantity
-    attr_reader :container
 
     def to_s()
         "#{quantity.capitalize} #{container} of beer on the wall, #{quantity} #{container} of beer.\n" \
-        "#{action()}, #{self.next().quantity} #{self.next().container} of beer on the wall.\n"
+        "#{action()}, #{sucessor().quantity} #{sucessor().container} of beer on the wall.\n"
+    end
+
+    def action()
+        "Take #{@pronoun} down and pass it around"
+    end
+
+    def sucessor()
+        Verse.create(@number - 1)
     end
 end
 
-class ZeroBottleVerse  < Verse
-    def initialize(next_verse)
+class ZeroBottleVerse < Verse
+    def initialize(sucessor)
         @quantity = 'no more'
         @container = 'bottles'
-        @next = next_verse
+        @sucessor = sucessor
     end
 
     def action()
         'Go to the store and buy some more'
     end
 
-    def next()
-        @next
+    def sucessor()
+        @sucessor
     end
 end
 
-class PassAroundVerse < Verse
-    def action()
-        "Take #{@pronoun} down and pass it around"
-    end
-
-    def next()
-        VerseFactory.create(@number - 1)
-    end
-end
-
-class ManyBottlesVerse < PassAroundVerse
+class ManyBottlesVerse < Verse
     def initialize(number)
         @number = number
         @quantity = "#{number}"
@@ -82,7 +74,7 @@ class ManyBottlesVerse < PassAroundVerse
     end
 end
 
-class OneBottleVerse < PassAroundVerse
+class OneBottleVerse < Verse
     def initialize()
         @number = 1
         @quantity = '1'
@@ -91,7 +83,7 @@ class OneBottleVerse < PassAroundVerse
     end
 end
 
-class OneSixPackVerse < PassAroundVerse
+class OneSixPackVerse < Verse
     def initialize()
         @number = 6
         @quantity = '1'
