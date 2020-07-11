@@ -42,12 +42,8 @@ class Verse
     attr_reader :container
 
     def to_s()
-        "#{quantity_in_container().capitalize} of beer on the wall, #{quantity_in_container()} of beer.\n" \
-        "#{action()}, #{self.next().quantity_in_container()} of beer on the wall.\n"
-    end
-
-    def quantity_in_container()
-        "#{quantity} #{container}"
+        "#{quantity.capitalize} #{container} of beer on the wall, #{quantity} #{container} of beer.\n" \
+        "#{action()}, #{self.next().quantity} #{self.next().container} of beer on the wall.\n"
     end
 end
 
@@ -73,14 +69,14 @@ class PassAroundVerse < Verse
     end
 
     def next()
-        VerseFactory.create(@number_of_bottles - 1)
+        VerseFactory.create(@number - 1)
     end
 end
 
 class ManyBottlesVerse < PassAroundVerse
-    def initialize(number_of_bottles)
-        @number_of_bottles = number_of_bottles
-        @quantity = @number_of_bottles
+    def initialize(number)
+        @number = number
+        @quantity = "#{number}"
         @container = 'bottles'
         @pronoun = 'one'
     end
@@ -88,8 +84,8 @@ end
 
 class OneBottleVerse < PassAroundVerse
     def initialize()
-        @number_of_bottles = 1
-        @quantity = 1
+        @number = 1
+        @quantity = '1'
         @container = 'bottle'
         @pronoun = 'it'
     end
@@ -97,8 +93,8 @@ end
 
 class OneSixPackVerse < PassAroundVerse
     def initialize()
-        @number_of_bottles = 6
-        @quantity = 1
+        @number = 6
+        @quantity = '1'
         @container = 'six-pack'
         @pronoun = 'one'
     end
