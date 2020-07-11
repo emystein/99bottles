@@ -10,19 +10,20 @@ class Bottles
     end
 
     def verses(high, low)
-        high.downto(low).map { |bottle| self.verse(bottle) }.join("\n")
+        high.downto(low).map { |number| self.verse(number) }.join("\n")
     end
 
     def verse(number)
-        Verse.number(number).to_s
+        VerseFactory.create(number).to_s
     end
 end
 
-class Verse
-    attr_reader :quantity
-    attr_reader :container
+class VerseFactory
+    def self.create_first()
+        ManyBottlesVerse.new(Bottles.total)
+    end
 
-    def self.number(number)
+    def self.create(number)
         case number
         when 0
             ZeroBottleVerse.new
@@ -34,6 +35,11 @@ class Verse
             ManyBottlesVerse.new(number)
         end
     end
+end
+
+class Verse
+    attr_reader :quantity
+    attr_reader :container
 
     def to_s()
         "#{self.quantity_in_container().capitalize} of beer on the wall, #{self.quantity_in_container()} of beer.\n" \
@@ -56,7 +62,7 @@ class ZeroBottleVerse  < Verse
     end
 
     def next()
-        Verse.number(Bottles.total)
+        VerseFactory.create_first()
     end
 end
 
@@ -66,7 +72,7 @@ class PassAroundVerse < Verse
     end
 
     def next()
-        Verse.number(@number_of_bottles - 1)
+        VerseFactory.create(@number_of_bottles - 1)
     end
 end
 
